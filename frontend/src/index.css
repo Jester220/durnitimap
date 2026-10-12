@@ -1,0 +1,53 @@
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Hind+Siliguri:wght@400;500;600;700&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --color-paper: #fbf6ea;
+  --color-ink: #1c1917;
+  --color-forest: #0b3d2e;
+  --color-forest-soft: #e3efe8;
+  --color-signal: #d62839;
+  --color-ochre: #c9a227;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-sans: "Hind Siliguri", system-ui, sans-serif;
+}
+
+body {
+  @apply bg-paper text-ink font-sans antialiased;
+}
+
+@layer components {
+  .card {
+    @apply bg-white border-2 border-ink rounded-md p-5 shadow-[4px_4px_0_0_var(--color-forest)];
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-md border-2 border-ink px-4 py-2 font-semibold transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed;
+  }
+  .btn-sm {
+    @apply px-3 py-1 text-sm;
+  }
+  .btn-primary {
+    @apply bg-forest text-paper hover:bg-ink;
+  }
+  .btn-light {
+    @apply bg-white text-ink hover:bg-forest-soft;
+  }
+  .input {
+    @apply w-full rounded-md border-2 border-ink bg-white px-3 py-2 focus:outline-none focus:ring-4 focus:ring-ochre/50;
+  }
+  .label {
+    @apply block text-sm font-semibold mb-1;
+  }
+  .field-error {
+    @apply text-sm text-signal mt-1;
+  }
+  .alert-error {
+    @apply rounded-md border-2 border-signal bg-red-50 text-signal px-3 py-2 text-sm font-semibold;
+  }
+  .badge-official {
+    @apply inline-block bg-forest-soft text-forest border border-forest rounded px-2 py-0.5 text-xs font-semibold uppercase tracking-wide;
+  }
+  .badge-reported {
+    @apply inline-block bg-amber-50 text-amber-900 border border-ochre rounded px-2 py-0.5 text-xs font-semibold uppercase tracking-wide;
+  }
+}
