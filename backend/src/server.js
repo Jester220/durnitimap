@@ -1,4 +1,5 @@
 require("dotenv").config();
+const authRoutes = require("./routes/authRoutes");
 const express = require("express");
 const cors = require("cors");
 const pool = require("./config/db");
@@ -9,7 +10,7 @@ const app = express();
 app.use(cors({ origin: process.env.CLIENT_URL }));
 app.use(express.json());
 
-// Health check: confirms the server and database are working
+
 app.get("/api/health", async (req, res, next) => {
   try {
     await pool.query("SELECT 1");
@@ -18,7 +19,7 @@ app.get("/api/health", async (req, res, next) => {
     next(err);
   }
 });
-
+app.use("/api/auth", authRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
