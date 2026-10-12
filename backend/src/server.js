@@ -1,4 +1,6 @@
 require("dotenv").config();
+const officeRoutes = require("./routes/officeRoutes");
+const reportRoutes = require("./routes/reportRoutes");
 const authRoutes = require("./routes/authRoutes");
 const express = require("express");
 const cors = require("cors");
@@ -20,6 +22,8 @@ app.get("/api/health", async (req, res, next) => {
   }
 });
 app.use("/api/auth", authRoutes);
+app.use("/api/offices", officeRoutes);
+app.use("/api/reports", reportRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
