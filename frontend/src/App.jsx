@@ -7,8 +7,14 @@ import Register from "./pages/Register";
 import Offices from "./pages/Offices";
 import OfficeDetail from "./pages/OfficeDetail";
 import NewReport from "./pages/NewReport";
-import NotFound from "./pages/NotFound";
 import MyReports from "./pages/MyReports";
+import AdminOffices from "./pages/AdminOffices";
+import AdminOfficeForm from "./pages/AdminOfficeForm";
+import AdminOfficeDetail from "./pages/AdminOfficeDetail";
+import AdminServiceForm from "./pages/AdminServiceForm";
+import NotFound from "./pages/NotFound";
+
+const admin = (page) => <ProtectedRoute role="admin">{page}</ProtectedRoute>;
 
 export default function App() {
   return (
@@ -28,8 +34,7 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
-               <Route
+        <Route
           path="/my-reports"
           element={
             <ProtectedRoute>
@@ -37,7 +42,13 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-        {/* SAIF: add admin routes here */}
+
+        <Route path="/admin" element={admin(<AdminOffices />)} />
+        <Route path="/admin/offices/new" element={admin(<AdminOfficeForm />)} />
+        <Route path="/admin/offices/:id" element={admin(<AdminOfficeDetail />)} />
+        <Route path="/admin/offices/:id/edit" element={admin(<AdminOfficeForm />)} />
+        <Route path="/admin/offices/:officeId/services/new" element={admin(<AdminServiceForm />)} />
+        <Route path="/admin/offices/:officeId/services/:serviceId/edit" element={admin(<AdminServiceForm />)} />
 
         <Route path="*" element={<NotFound />} />
       </Route>
