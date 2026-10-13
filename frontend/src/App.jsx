@@ -8,6 +8,7 @@ import Offices from "./pages/Offices";
 import OfficeDetail from "./pages/OfficeDetail";
 import NewReport from "./pages/NewReport";
 import NotFound from "./pages/NotFound";
+import MyReports from "./pages/MyReports";
 
 export default function App() {
   return (
@@ -28,7 +29,14 @@ export default function App() {
           }
         />
 
-        {/* NAHID: add "My Reports" routes here */}
+               <Route
+          path="/my-reports"
+          element={
+            <ProtectedRoute>
+              <MyReports />
+            </ProtectedRoute>
+          }
+        />
         {/* SAIF: add admin routes here */}
 
         <Route path="*" element={<NotFound />} />
