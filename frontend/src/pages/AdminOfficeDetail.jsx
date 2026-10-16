@@ -100,7 +100,7 @@ export default function AdminOfficeDetail() {
             {s.official_fee === null ? "Not set" : money(s.official_fee)}
             {" · "}
             <span className="font-semibold">Processing:</span>{" "}
-            {s.processing_days ? `${s.processing_days} days` : "Not set"}
+            {s.processing_days != null   ? `${s.processing_days} days`   : "Not set"}
           </p>
           {s.required_documents && (
             <p className="text-sm whitespace-pre-line">
