@@ -11,6 +11,10 @@ const toId = (v) => {
   const n = Number(v);
   return Number.isInteger(n) && n > 0 ? n : null;
 };
+const toCoord = (v) => {
+  const t = clean(v);
+  return t === "" ? null : Number(t);
+};
 const toActive = (v) => (v === false || v === 0 || v === "0" ? 0 : 1);
 const fail = (res, errors) => res.status(400).json({ message: "Please fix the errors", errors });
 
@@ -24,9 +28,19 @@ function validateOffice(body) {
     upazila: orNull(body.upazila),
     address: orNull(body.address),
     contact_info: orNull(body.contact_info),
+    latitude: toCoord(body.latitude),
+    longitude: toCoord(body.longitude),
     is_active: toActive(body.is_active),
   };
   const errors = {};
+  if ((v.latitude === null) !== (v.longitude === null)) {
+    errors.latitude = "Enter both latitude and longitude, or leave both empty";
+  } else if (v.latitude !== null) {
+    if (!Number.isFinite(v.latitude) || v.latitude < 20.5 || v.latitude > 26.8)
+      errors.latitude = "Latitude must be a number between 20.5 and 26.8 (Bangladesh)";
+    if (!Number.isFinite(v.longitude) || v.longitude < 88.0 || v.longitude > 92.8)
+      errors.longitude = "Longitude must be a number between 88.0 and 92.8 (Bangladesh)";
+  }
   if (v.name.length < 3 || v.name.length > 150) errors.name = "Name must be 3 to 150 characters";
   if (v.name_bn && v.name_bn.length > 150) errors.name_bn = "Bangla name is too long (max 150)";
   if (v.type.length < 2 || v.type.length > 80) errors.type = "Office type must be 2 to 80 characters";
@@ -125,9 +139,9 @@ async function createOffice(req, res, next) {
     if (Object.keys(errors).length > 0) return fail(res, errors);
 
     const [result] = await pool.query(
-      `INSERT INTO offices (name, name_bn, type, division, district, upazila, address, contact_info, is_active)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [v.name, v.name_bn, v.type, v.division, v.district, v.upazila, v.address, v.contact_info, v.is_active]
+      `INSERT INTO offices (name, name_bn, type, division, district, upazila, address, contact_info, latitude, longitude, is_active)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [v.name, v.name_bn, v.type, v.division, v.district, v.upazila, v.address, v.contact_info, v.latitude, v.longitude, v.is_active]
     );
     res.status(201).json({ id: result.insertId, message: "Office added" });
   } catch (err) {
@@ -149,9 +163,9 @@ async function updateOffice(req, res, next) {
 
     await pool.query(
       `UPDATE offices SET name = ?, name_bn = ?, type = ?, division = ?, district = ?,
-              upazila = ?, address = ?, contact_info = ?, is_active = ?
+              upazila = ?, address = ?, contact_info = ?, latitude = ?, longitude = ?, is_active = ?
        WHERE id = ?`,
-      [v.name, v.name_bn, v.type, v.division, v.district, v.upazila, v.address, v.contact_info, v.is_active, id]
+      [v.name, v.name_bn, v.type, v.division, v.district, v.upazila, v.address, v.contact_info, v.latitude, v.longitude, v.is_active, id]
     );
     res.json({ id, message: "Office updated" });
   } catch (err) {

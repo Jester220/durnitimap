@@ -13,6 +13,7 @@ import AdminOfficeForm from "./pages/AdminOfficeForm";
 import AdminOfficeDetail from "./pages/AdminOfficeDetail";
 import AdminServiceForm from "./pages/AdminServiceForm";
 import NotFound from "./pages/NotFound";
+import { module2Routes } from "./module2";
 
 const admin = (page) => <ProtectedRoute role="admin">{page}</ProtectedRoute>;
 
@@ -49,6 +50,9 @@ export default function App() {
         <Route path="/admin/offices/:id/edit" element={admin(<AdminOfficeForm />)} />
         <Route path="/admin/offices/:officeId/services/new" element={admin(<AdminServiceForm />)} />
         <Route path="/admin/offices/:officeId/services/:serviceId/edit" element={admin(<AdminServiceForm />)} />
+
+        {/* Module 2 features register themselves from src/module2/<feature>/feature.jsx */}
+        {module2Routes}
 
         <Route path="*" element={<NotFound />} />
       </Route>

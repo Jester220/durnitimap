@@ -7,6 +7,7 @@ const cors = require("cors");
 const pool = require("./config/db");
 const { notFound, errorHandler } = require("./middleware/errorHandler");
 const adminRoutes = require("./routes/adminRoutes");
+const module2Routes = require("./module2");
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/offices", officeRoutes);
 app.use("/api/reports", reportRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api", module2Routes);
 app.use(notFound);
 app.use(errorHandler);
 
