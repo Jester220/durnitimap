@@ -1,5 +1,6 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { module2NavLinks } from "../module2";
 
 const linkClass = ({ isActive }) =>
   `px-1 py-1 font-semibold border-b-2 ${
@@ -25,6 +26,11 @@ export default function Navbar() {
 
         <nav className="flex flex-wrap items-center gap-3 text-sm">
           <NavLink to="/offices" className={linkClass}>Offices</NavLink>
+          {module2NavLinks
+            .filter((l) => !l.requires || (user && (l.requires !== "admin" || user.role === "admin")))
+            .map((l) => (
+              <NavLink key={l.to} to={l.to} className={linkClass}>{l.label}</NavLink>
+            ))}
           {user && <NavLink to="/report/new" className={linkClass}>Submit Report</NavLink>}
           {user && <NavLink to="/my-reports" className={linkClass}>My Reports</NavLink>}
           {user?.role === "admin" && <NavLink to="/admin" className={linkClass}>Admin</NavLink>}

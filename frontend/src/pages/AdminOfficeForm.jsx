@@ -12,6 +12,8 @@ const EMPTY = {
   upazila: "",
   address: "",
   contact_info: "",
+  latitude: "",
+  longitude: "",
   is_active: true,
 };
 
@@ -38,6 +40,8 @@ export default function AdminOfficeForm() {
           upazila: o.upazila ?? "",
           address: o.address ?? "",
           contact_info: o.contact_info ?? "",
+          latitude: o.latitude ?? "",
+          longitude: o.longitude ?? "",
           is_active: !!o.is_active,
         });
       })
@@ -53,6 +57,13 @@ export default function AdminOfficeForm() {
     if (form.type.trim().length < 2) e.type = "Enter the office type, e.g. Passport Office";
     if (!form.division) e.division = "Select a division";
     if (form.district.trim().length < 2) e.district = "Enter the district";
+    const lat = String(form.latitude).trim();
+    const lng = String(form.longitude).trim();
+    if ((lat === "") !== (lng === "")) e.latitude = "Enter both latitude and longitude, or leave both empty";
+    else if (lat !== "") {
+      if (!(Number(lat) >= 20.5 && Number(lat) <= 26.8)) e.latitude = "Latitude must be between 20.5 and 26.8 (Bangladesh)";
+      if (!(Number(lng) >= 88.0 && Number(lng) <= 92.8)) e.longitude = "Longitude must be between 88.0 and 92.8 (Bangladesh)";
+    }
     return e;
   }
 
@@ -122,6 +133,15 @@ export default function AdminOfficeForm() {
         </div>
         {input("address", "Address (optional)", { maxLength: 255 })}
         {input("contact_info", "Contact info (optional)", { maxLength: 150 })}
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          {input("latitude", "Map latitude (optional, e.g. 23.7792)", { type: "number", step: "any" })}
+          {input("longitude", "Map longitude (optional, e.g. 90.3796)", { type: "number", step: "any" })}
+        </div>
+        <p className="text-xs text-stone-600 -mt-2">
+          Needed to show the office on the Map page. Tip: right-click the place on openstreetmap.org and choose
+          &quot;Show address&quot; to read its coordinates.
+        </p>
 
         <label className="flex items-center gap-2 font-semibold">
           <input
